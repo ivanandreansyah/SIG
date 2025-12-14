@@ -1,0 +1,13 @@
+# Supabase Configuration (REQUIRED)
+# Get these from your Supabase Project Settings -> API
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+
+# Map Configuration (OPTIONAL - for map tiles)
+# Get this from https://cloud.maptiler.com/account/keys
+NEXT_PUBLIC_MAPTILER_API_KEY=your_maptiler_key
+
+# Admin Credentials
+ADMIN_USER=admin
+ADMIN_PASSWORD=admin123
