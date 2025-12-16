@@ -101,8 +101,17 @@ const ControlPanel = ({
     <>
       {/* Panel Container */}
       <div
-        className={`${isOpen ? `w-80 opacity-100 translate-x-0` : "w-0 opacity-0 -translate-x-4 pointer-events-none"
-          } fixed left-4 top-4 bottom-24 rounded-2xl bg-slate-900/95 backdrop-blur-xl border border-white/20 flex flex-col z-40 shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300 overflow-hidden`}
+        className={`${isOpen
+          ? "translate-y-0 opacity-100 pointer-events-auto md:translate-x-0"
+          : "-translate-y-[110%] opacity-0 pointer-events-none md:translate-y-0 md:-translate-x-4"
+          } fixed z-40 flex flex-col bg-slate-900/95 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all duration-300 cubic-bezier(0.4, 0, 0.2, 1) overflow-hidden
+          
+          /* Mobile: Top Floating Sheet */
+          left-3 right-3 top-4 h-[55vh] rounded-2xl
+          
+          /* Desktop: Left Side Panel */
+          md:left-4 md:top-4 md:bottom-24 md:right-auto md:w-80 md:h-auto md:rounded-2xl
+        `}
       >
         {/* Header */}
         <div className="p-5 border-b border-white/10 bg-gradient-to-r from-violet-600/20 via-purple-600/20 to-fuchsia-600/20 flex justify-between items-start">

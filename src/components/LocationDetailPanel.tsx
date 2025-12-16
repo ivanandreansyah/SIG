@@ -33,7 +33,8 @@ export const LocationDetailPanel = ({
     if (!location) return null;
 
     return (
-        <div className="fixed right-4 top-4 bottom-4 w-96 bg-slate-900/95 backdrop-blur-xl shadow-2xl z-[1000] overflow-y-auto rounded-3xl border border-white/10 transform transition-transform duration-300 ease-in-out scrollbar-hide">
+        <div className="fixed top-0 left-0 right-0 h-[75vh] md:h-auto md:inset-auto md:right-4 md:top-4 md:bottom-4 md:w-96 bg-slate-900/95 backdrop-blur-xl shadow-2xl z-[1000] overflow-y-auto rounded-b-3xl md:rounded-3xl border-b md:border border-white/10 transform transition-transform duration-300 ease-in-out scrollbar-hide">
+
             {/* Cover Image */}
             <div className="relative h-56 w-full bg-slate-800">
                 <img

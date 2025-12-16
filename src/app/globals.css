@@ -161,7 +161,10 @@ input[type="url"] {
   z-index: 1 !important;
 }
 
-.leaflet-top,
+.leaflet-top {
+  z-index: 2 !important;
+}
+
 .leaflet-bottom {
   z-index: 2 !important;
 }
