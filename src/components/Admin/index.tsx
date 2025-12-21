@@ -1,12 +1,13 @@
 "use client";
 
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Upload } from "lucide-react";
 import Link from "next/link";
 import {
   ChangeEvent,
   KeyboardEvent,
   ReactNode,
   useEffect,
+  useRef,
   useState,
 } from "react";
 
@@ -385,6 +386,7 @@ interface LocationFormProps {
   submitIcon?: ReactNode;
   cancelHref: string;
   manageCategoriesHref?: string;
+  onUpload?: (file: File) => Promise<string>;
 }
 
 export const LocationForm = ({
@@ -397,9 +399,12 @@ export const LocationForm = ({
   submitIcon,
   cancelHref,
   manageCategoriesHref,
+  onUpload,
 }: LocationFormProps) => {
   const [formData, setFormData] = useState<LocationFormValues>(initialValues);
   const [imageInput, setImageInput] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     setFormData(initialValues);
@@ -426,6 +431,28 @@ export const LocationForm = ({
       ...prev,
       images: prev.images.filter((_, i) => i !== index),
     }));
+  };
+
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !onUpload) return;
+
+    setUploading(true);
+    try {
+      const url = await onUpload(file);
+      if (url) {
+        setFormData((prev) => ({
+          ...prev,
+          images: [...prev.images, url],
+        }));
+      }
+    } catch (error) {
+      console.error("Upload failed", error);
+      alert("Gagal mengupload foto");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -590,6 +617,37 @@ export const LocationForm = ({
               Tambah
             </Button>
           </div>
+
+          {onUpload && (
+            <div className="flex items-center gap-2">
+              <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                accept="image/*"
+                onChange={handleFileChange}
+              />
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+                className="w-full justify-center border-dashed border-2 border-slate-600 bg-slate-800/30 hover:bg-slate-800/60"
+              >
+                {uploading ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Mengupload...
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-4 h-4" />
+                    Upload Foto dari Perangkat
+                  </>
+                )}
+              </Button>
+            </div>
+          )}
 
           {formData.images.length > 0 && (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">

@@ -79,6 +79,21 @@ export default function CreateLocationPage() {
     }
   };
 
+  const handleUpload = async (file: File): Promise<string> => {
+    const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
+    const { data, error } = await supabase.storage
+      .from("locations")
+      .upload(fileName, file);
+
+    if (error) throw error;
+
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from("locations").getPublicUrl(data.path);
+
+    return publicUrl;
+  };
+
   return (
     <div>
       <PageHeader
@@ -98,6 +113,7 @@ export default function CreateLocationPage() {
           submitIcon={<Save className="w-4 h-4" />}
           cancelHref="/admin"
           manageCategoriesHref="/admin/categories"
+          onUpload={handleUpload}
         />
       </Card>
     </div>

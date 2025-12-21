@@ -124,6 +124,21 @@ export default function EditLocationPage({
     }
   };
 
+  const handleUpload = async (file: File): Promise<string> => {
+    const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
+    const { data, error } = await supabase.storage
+      .from("locations")
+      .upload(fileName, file);
+
+    if (error) throw error;
+
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from("locations").getPublicUrl(data.path);
+
+    return publicUrl;
+  };
+
   if (categoriesLoading || locationLoading || !locationData) {
     return <LoadingState />;
   }
@@ -146,6 +161,7 @@ export default function EditLocationPage({
           submittingLabel="Menyimpan..."
           submitIcon={<Save className="w-4 h-4" />}
           cancelHref="/admin"
+          onUpload={handleUpload}
         />
       </Card>
     </div>
